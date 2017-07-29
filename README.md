@@ -1,5 +1,4 @@
 # Blank-Repo
-lul ggez
 
 Members:
 Rafael Sayson
