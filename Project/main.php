@@ -22,18 +22,19 @@
 
 <?php  
 include("config.php");
-$sql = "SELECT studentID, firstName, lastName, university from student";
+$sql = "SELECT studentID, firstName, lastName, birthday, university from student"; //STR_TO_DATE(birthday, '%c/%e/%Y')
 $result = mysqli_query($db, $sql);
 
 $sql1 = "SELECT distinct university from student";
 $result1 = mysqli_query($db, $sql1);
+$result2 = mysqli_query($db, $sql1); //for another result fetch for second dropdown
 
 echo
 '<form>
     <h3>Filter by:</h3>
 
     <div class="form-group col-sm-3">
-        <label for="dropdown1">University: </label>
+        <label for="dropdown1">University (Single): </label>
         <select id="dropdown1" class="form-control">
             <option value=""> - </option>';
             while($row = mysqli_fetch_array($result1)){
@@ -52,6 +53,16 @@ echo
         <label for="lastNameSearch">Last Name: </label>
         <input type="text" id="lastNameSearch" placeholder="Last name" class="form-control">
     </div>
+
+    <div class="form-group col-sm-3">
+        <label for="lastNameSearch">Birthday: </label>
+        <input type="text" id="birthdaySearch" placeholder="Birthday" class="form-control">
+    </div>
+
+    <div class="form-group col-sm-3">
+        <label for="testingSearch">University (Multiple - Regex): </label>
+        <input type="text" id="testingSearch" placeholder="University (Regex)" class="form-control">
+    </div>
 </form>
 
 <table id="example" class="display">
@@ -60,6 +71,7 @@ echo
             <th>ID</th>
             <th>First Name</th>
             <th>Last Name</th>
+            <th>Birthday</th>
             <th>University</th>
         </tr>
     </thead>
@@ -71,6 +83,7 @@ echo
     echo "<td>" .$row["studentID"]. "</td>";
     echo "<td>" .$row["firstName"]. "</td>";
     echo "<td>" .$row["lastName"]. "</td>";
+    echo "<td>" .$row["birthday"]. "</td>";
     echo "<td>" .$row["university"]. "</td>";
     echo "</tr>";
     }
@@ -91,8 +104,10 @@ echo
                 //bFilter: false
             });
 
+            var searchString;
+
             $('#dropdown1').on('change', function () {
-                    table.columns(3).search( this.value ).draw();
+                    table.columns(4).search( this.value ).draw();
             });
 
             $('#firstNameSearch').on('keyup change', function () {
@@ -101,6 +116,14 @@ echo
 
             $('#lastNameSearch').on('keyup change', function () {
                     table.columns(2).search( this.value ).draw();
+            });
+
+            $('#birthdaySearch').on('keyup change', function () {
+                    table.columns(3).search( this.value ).draw();
+            });
+
+            $('#testingSearch').on('keyup', function () {
+            		table.columns(4).search( this.value, true, true ).draw();
             });
 
         });
