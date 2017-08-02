@@ -22,7 +22,7 @@
 
 <?php  
 include("config.php");
-$sql = "SELECT studentID, firstName, lastName, birthday, university from student"; //STR_TO_DATE(birthday, '%c/%e/%Y')
+$sql = "SELECT studentID, firstName, lastName, birthday, age, university from student"; //STR_TO_DATE(birthday, '%c/%e/%Y')
 $result = mysqli_query($db, $sql);
 
 $sql1 = "SELECT distinct university from student";
@@ -58,11 +58,18 @@ echo
         <label for="lastNameSearch">Birthday: </label>
         <input type="text" id="birthdaySearch" placeholder="Birthday" class="form-control">
     </div>
+	
+	<div class="form-group col-sm-3">
+        <label for="lastNameSearch">Age: </label>
+        <input type="text" id="ageSearch" placeholder="Age" class="form-control">
+    </div>
+
 
     <div class="form-group col-sm-3">
         <label for="testingSearch">University (Multiple - Regex): </label>
         <input type="text" id="testingSearch" placeholder="University (Regex)" class="form-control">
     </div>
+	
 </form>
 
 <table id="example" class="display">
@@ -72,6 +79,7 @@ echo
             <th>First Name</th>
             <th>Last Name</th>
             <th>Birthday</th>
+			<th>Age</th>
             <th>University</th>
         </tr>
     </thead>
@@ -84,6 +92,7 @@ echo
     echo "<td>" .$row["firstName"]. "</td>";
     echo "<td>" .$row["lastName"]. "</td>";
     echo "<td>" .$row["birthday"]. "</td>";
+	echo "<td>" .$row["age"]. "</td>";
     echo "<td>" .$row["university"]. "</td>";
     echo "</tr>";
     }
@@ -107,7 +116,7 @@ echo
             var searchString;
 
             $('#dropdown1').on('change', function () {
-                    table.columns(4).search( this.value ).draw();
+                    table.columns(5).search( this.value ).draw();
             });
 
             $('#firstNameSearch').on('keyup change', function () {
@@ -121,9 +130,13 @@ echo
             $('#birthdaySearch').on('keyup change', function () {
                     table.columns(3).search( this.value ).draw();
             });
+			
+			$('#ageSearch').on('keyup change', function () {
+                    table.columns(4).search( this.value ).draw();
+            });
 
             $('#testingSearch').on('keyup', function () {
-            		table.columns(4).search( this.value, true, true ).draw();
+            		table.columns(5).search( this.value, true, true ).draw();
             });
 
         });
