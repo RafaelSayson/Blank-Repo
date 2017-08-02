@@ -70,6 +70,16 @@ echo
         <input type="text" id="testingSearch" placeholder="University (Regex)" class="form-control">
     </div>
 	
+	<div class="form-group col-sm-2">
+        <label for="testingSearch">Min age: </label>
+        <input type="text" id="min" class="form-control">
+    </div>
+	
+	<div class="form-group col-sm-2">
+        <label for="testingSearch">Max age: </label>
+        <input type="text" id="max" class="form-control">
+    </div>
+	
 </form>
 
 <table id="example" class="display">
@@ -114,6 +124,27 @@ echo
             });
 
             var searchString;
+			
+			$.fn.dataTable.ext.search.push(
+				function( settings, data, dataIndex ) {
+					var min = parseInt( $('#min').val(), 10 );
+					var max = parseInt( $('#max').val(), 10 );
+					var age = parseFloat( data[4] ) || 0; // use data for the age column
+			 
+					if ( ( isNaN( min ) && isNaN( max ) ) ||
+						 ( isNaN( min ) && age <= max ) ||
+						 ( min <= age   && isNaN( max ) ) ||
+						 ( min <= age   && age <= max ) )
+					{
+						return true;
+					}
+					return false;
+				}
+			);
+			
+			$('#min, #max').keyup( function() {
+				table.draw();
+			} );
 
             $('#dropdown1').on('change', function () {
                     table.columns(5).search( this.value ).draw();
